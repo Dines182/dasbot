@@ -19,6 +19,9 @@ def about_us():
     st.dataframe(summary_df.style.format("{:.2f}"))
 
     st.subheader("Retention Visualizations for 2024")
+    st.subheader(“NOTE : 2024 values are predicted using Random Forest model trained on 2023 data”)
+
+
 
     fig1 = px.box(df_2024.melt(id_vars=["Region Name"],
                                value_vars=["Teacher Retention", "Non-Teacher Retention"],
@@ -54,56 +57,54 @@ def about_us():
                      title="Teacher vs Non-Teacher Retention Distribution by Year")
     st.plotly_chart(fig_box, use_container_width=True)
 
-    st.title("📊 Retention Summary & Visualization (2019–2024)")
+    st.title(" Retention Summary & Visualization (2019–2024)")
 
     # Calculate retention gap for all years
     df["Retention Gap"] = df["Teacher Retention"] - df["Non-Teacher Retention"]
 
     yearly_stats = df.groupby("Year")[["Teacher Retention", "Non-Teacher Retention", "Retention Gap"]].mean().reset_index()
-    st.subheader("📌 Retention Gap Over the Years")
+    st.subheader("Retention Gap Over the Years")
     fig_line_gap = px.line(yearly_stats, x="Year", y="Retention Gap", markers=True,
                            title="Average Retention Gap (Teacher - Non-Teacher) by Year")
     st.plotly_chart(fig_line_gap, use_container_width=True)
 
-    st.subheader("📌 Teacher vs Non-Teacher Retention Trends")
+    st.subheader("Teacher vs Non-Teacher Retention Trends")
     fig_line_retention = px.line(yearly_stats, x="Year",
                                  y=["Teacher Retention", "Non-Teacher Retention"],
                                  markers=True, title="Teacher and Non-Teacher Retention Over Years")
     st.plotly_chart(fig_line_retention, use_container_width=True)
 
-    st.subheader("📌 Region-wise Retention Gap Over Years")
+    st.subheader("Region-wise Retention Gap Over Years")
     region_year_gap = df.groupby(["Region Name", "Year"])["Retention Gap"].mean().reset_index()
     fig_region_gap = px.line(region_year_gap, x="Year", y="Retention Gap", color="Region Name",
                              markers=True, title="Region-wise Retention Gap Over Time")
     st.plotly_chart(fig_region_gap, use_container_width=True)
 
-    st.subheader("📌 Boxplot: Teacher vs Non-Teacher Retention by Year")
+    st.subheader("Boxplot: Teacher vs Non-Teacher Retention by Year")
     melted = df.melt(id_vars=["Year"], value_vars=["Teacher Retention", "Non-Teacher Retention"],
                      var_name="Retention Type", value_name="Retention Value")
     fig_box_years = px.box(melted, x="Year", y="Retention Value", color="Retention Type",
                            title="Retention Distribution by Year")
     st.plotly_chart(fig_box_years, use_container_width=True)
-
-    st.title("📊 School Retention & Enrolment Analysis (2019–2024)")
-
+    
     # Calculate retention gap
     df["Retention Gap"] = df["Teacher Retention"] - df["Non-Teacher Retention"]
 
-    st.subheader("📌 Yearly Averages: Retention & Enrolments")
+    st.subheader("Yearly Averages: Retention & Enrolments")
     yearly_stats = df.groupby("Year")[["Teacher Retention", "Non-Teacher Retention", "Retention Gap", "Enrolments"]].mean().reset_index()
     st.dataframe(yearly_stats.style.format("{:.2f}"))
 
-    st.subheader("📌 Enrolments Over Time")
+    st.subheader("Enrolments Over Time")
     fig_enrol = px.line(yearly_stats, x="Year", y="Enrolments", markers=True, title="Average Enrolments by Year")
     st.plotly_chart(fig_enrol, use_container_width=True)
 
-    st.subheader("📌 Region-wise Enrolment Trends")
+    st.subheader("Region-wise Enrolment Trends")
     region_enrol = df.groupby(["Region Name", "Year"])["Enrolments"].mean().reset_index()
     fig_region_enrol = px.line(region_enrol, x="Year", y="Enrolments", color="Region Name",
                                markers=True, title="Average Enrolments per Region (2019–2024)")
     st.plotly_chart(fig_region_enrol, use_container_width=True)
 
-    st.subheader("📌 Correlation Heatmap (All Years)")
+    st.subheader("Correlation Heatmap (All Years)")
     numeric_cols = df.select_dtypes(include="number")[["Enrolments", "Teacher Retention", "Non-Teacher Retention", "Retention Gap"]]
     corr_matrix = numeric_cols.corr()
 
