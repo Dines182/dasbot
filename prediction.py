@@ -19,7 +19,7 @@ def about_us():
     st.dataframe(summary_df.style.format("{:.2f}"))
 
     st.subheader("Retention Visualizations for 2024")
-    st.subheader(“NOTE : 2024 values are predicted using Random Forest model trained on 2023 data”)
+    st.subheader("NOTE : 2024 values are predicted using Random Forest model trained on 2023 data")
 
 
 
